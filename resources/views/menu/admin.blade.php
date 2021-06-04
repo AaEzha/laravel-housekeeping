@@ -22,3 +22,21 @@
         <span>Status Kamar</span>
     </a>
 </li>
+<li class="nav-item {{ Nav::isRoute('admin.kamar') }}">
+    <a class="nav-link" href="{{ route('admin.kamar') }}">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Kamar</span>
+    </a>
+</li>
+<li class="nav-item {{ Nav::isRoute('admin.keluhan') }}">
+    <a class="nav-link" href="{{ route('admin.keluhan') }}">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Keluhan</span>
+    </a>
+</li>
+<li class="nav-item {{ Nav::isRoute('admin.perbaikan') }}">
+    <a class="nav-link" href="{{ route('admin.perbaikan') }}">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Perbaikan</span>
+    </a>
+</li>

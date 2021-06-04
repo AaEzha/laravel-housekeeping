@@ -37,4 +37,10 @@ Route::name('admin.')->prefix('admin')->middleware('can:admin')->group(function(
     Route::post('/status_kamar', 'AdminController@status_kamar');
     Route::get('/roles', 'AdminController@roles')->name('roles');
     Route::post('/roles', 'AdminController@roles');
+    Route::get('/keluhan', 'AdminController@keluhan')->name('keluhan');
+    Route::post('/keluhan', 'AdminController@keluhan');
+    Route::get('/perbaikan', 'AdminController@perbaikan')->name('perbaikan');
+    Route::post('/perbaikan', 'AdminController@perbaikan');
+    Route::get('/kamar', 'AdminController@kamar')->name('kamar');
+    Route::post('/kamar', 'AdminController@kamar');
 });

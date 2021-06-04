@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Asset;
+use App\Kamar;
+use App\Keluhan;
+use App\Perbaikan;
 use App\StatusKamar;
 use Illuminate\Http\Request;
 use GroceryCrud\Core\GroceryCrud;
@@ -126,6 +129,98 @@ class AdminController extends Controller
         });
         $crud->callbackAfterUpdate(function ($s) {
             $user = Role::find($s->primaryKeyValue);
+            $user->touch();
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
+    public function keluhan()
+    {
+        $title = "Keluhan";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('keluhan');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Keluhan', 'Keluhan');
+        $crud->unsetColumns(['created_at','updated_at']);
+        $crud->unsetFields(['created_at','updated_at']);
+        $crud->unsetEdit()->unsetDelete()->unsetAdd();
+        $crud->setRelation('kamar_id', 'kamar', 'nomor_kamar');
+        $crud->setRelation('user_id', 'users', '{name} {last_name}');
+        $crud->displayAs([
+            'kamar_id' => 'Nomor Kamar',
+            'user_id' => 'Nama Tamu'
+        ]);
+        $crud->callbackAfterInsert(function ($s) {
+            $data = Keluhan::find($s->insertId);
+            $data->created_at = now();
+            $data->touch();
+            return $s;
+        });
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = Keluhan::find($s->primaryKeyValue);
+            $user->touch();
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
+    public function perbaikan()
+    {
+        $title = "Perbaikan";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('perbaikan');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Perbaikan', 'Perbaikan');
+        $crud->unsetColumns(['created_at','updated_at']);
+        $crud->unsetFields(['created_at','updated_at']);
+        $crud->unsetEdit()->unsetDelete()->unsetAdd();
+        $crud->setRelation('keluhan_id', 'keluhan', 'keluhan');
+        $crud->setRelation('user_id', 'users', '{name} {last_name}');
+        $crud->displayAs([
+            'keluhan_id' => 'Keluhan',
+            'user_id' => 'Nama Petugas'
+        ]);
+        $crud->callbackAfterInsert(function ($s) {
+            $data = Perbaikan::find($s->insertId);
+            $data->created_at = now();
+            $data->touch();
+            return $s;
+        });
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = Perbaikan::find($s->primaryKeyValue);
+            $user->touch();
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
+    public function kamar()
+    {
+        $title = "Kamar";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('kamar');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Kamar', 'Kamar');
+        $crud->unsetColumns(['created_at','updated_at']);
+        $crud->unsetFields(['created_at','updated_at']);
+        $crud->callbackAfterInsert(function ($s) {
+            $data = Kamar::find($s->insertId);
+            $data->created_at = now();
+            $data->touch();
+            return $s;
+        });
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = Kamar::find($s->primaryKeyValue);
             $user->touch();
             return $s;
         });
