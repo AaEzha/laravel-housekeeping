@@ -147,7 +147,6 @@ class AdminController extends Controller
         $crud->setSubject('Keluhan', 'Keluhan');
         $crud->unsetColumns(['created_at','updated_at']);
         $crud->unsetFields(['created_at','updated_at']);
-        $crud->unsetEdit()->unsetDelete()->unsetAdd();
         $crud->setRelation('kamar_id', 'kamar', 'nomor_kamar');
         $crud->setRelation('user_id', 'users', '{name} {last_name}');
         $crud->displayAs([
@@ -180,7 +179,6 @@ class AdminController extends Controller
         $crud->setSubject('Perbaikan', 'Perbaikan');
         $crud->unsetColumns(['created_at','updated_at']);
         $crud->unsetFields(['created_at','updated_at']);
-        $crud->unsetEdit()->unsetDelete()->unsetAdd();
         $crud->setRelation('keluhan_id', 'keluhan', 'keluhan');
         $crud->setRelation('user_id', 'users', '{name} {last_name}');
         $crud->displayAs([
