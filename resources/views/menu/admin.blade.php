@@ -28,6 +28,12 @@
         <span>Kamar</span>
     </a>
 </li>
+<li class="nav-item {{ Nav::isRoute('admin.asset-kamar') }}">
+    <a class="nav-link" href="{{ route('admin.asset-kamar') }}">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Asset Kamar</span>
+    </a>
+</li>
 <li class="nav-item {{ Nav::isRoute('admin.keluhan') }}">
     <a class="nav-link" href="{{ route('admin.keluhan') }}">
         <i class="fas fa-fw fa-list"></i>

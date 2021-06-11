@@ -43,4 +43,6 @@ Route::name('admin.')->prefix('admin')->middleware('can:admin')->group(function(
     Route::post('/perbaikan', 'AdminController@perbaikan');
     Route::get('/kamar', 'AdminController@kamar')->name('kamar');
     Route::post('/kamar', 'AdminController@kamar');
+    Route::get('/asset-kamar', 'AdminController@asset_kamar')->name('asset-kamar');
+    Route::post('/asset-kamar', 'AdminController@asset_kamar');
 });

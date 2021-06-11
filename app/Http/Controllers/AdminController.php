@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Asset;
+use App\AssetKamar;
 use App\Kamar;
 use App\Keluhan;
 use App\Perbaikan;
@@ -148,7 +149,7 @@ class AdminController extends Controller
         $crud->unsetColumns(['created_at','updated_at']);
         $crud->unsetFields(['created_at','updated_at']);
         $crud->setRelation('kamar_id', 'kamar', 'nomor_kamar');
-        $crud->setRelation('user_id', 'users', '{name} {last_name}');
+        $crud->setRelation('user_id', 'users', '{name} {last_name}', ['role_id' => 2]);
         $crud->displayAs([
             'kamar_id' => 'Nomor Kamar',
             'user_id' => 'Nama Tamu'
@@ -180,7 +181,7 @@ class AdminController extends Controller
         $crud->unsetColumns(['created_at','updated_at']);
         $crud->unsetFields(['created_at','updated_at']);
         $crud->setRelation('keluhan_id', 'keluhan', 'keluhan');
-        $crud->setRelation('user_id', 'users', '{name} {last_name}');
+        $crud->setRelation('user_id', 'users', '{name} {last_name}', ['role_id' => 3]);
         $crud->displayAs([
             'keluhan_id' => 'Keluhan',
             'user_id' => 'Nama Petugas'
@@ -222,6 +223,42 @@ class AdminController extends Controller
             $user->touch();
             return $s;
         });
+        $crud->displayAs([
+            'status_kamar_id' => 'Status Kamar'
+        ]);
+        $crud->setRelation('status_kamar_id','status_kamar','status_kamar');
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
+    public function asset_kamar()
+    {
+        $title = "Asset Kamar";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('asset_kamar');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Kamar', 'Kamar');
+        $crud->unsetColumns(['created_at','updated_at']);
+        $crud->unsetFields(['created_at','updated_at']);
+        $crud->callbackAfterInsert(function ($s) {
+            $data = AssetKamar::find($s->insertId);
+            $data->created_at = now();
+            $data->touch();
+            return $s;
+        });
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = AssetKamar::find($s->primaryKeyValue);
+            $user->touch();
+            return $s;
+        });
+        $crud->displayAs([
+            'kamar_id' => 'Kamar',
+            'asset_id' => 'Asset'
+        ]);
+        $crud->setRelation('kamar_id','kamar','nomor_kamar');
+        $crud->setRelation('asset_id','assets','nama_asset');
         $output = $crud->render();
 
         return $this->_show_output($output, $title);
