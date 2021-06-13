@@ -30,7 +30,7 @@ Route::get('/blank', function () {
     return view('blank');
 })->name('blank');
 
-Route::name('admin.')->prefix('admin')->middleware('can:admin')->group(function(){
+Route::name('admin.')->prefix('admin')->middleware('auth','can:admin')->group(function(){
     Route::get('/status_kamar', 'AdminController@status_kamar')->name('status_kamar');
     Route::post('/status_kamar', 'AdminController@status_kamar');
     Route::get('/roles', 'AdminController@roles')->name('roles');
@@ -45,5 +45,16 @@ Route::name('admin.')->prefix('admin')->middleware('can:admin')->group(function(
     Route::post('/asset-kamar/{kamar}', 'AdminController@asset_kamar');
 });
 
+Route::name('tamu.')->prefix('tamu')->middleware('auth','can:tamu')->group(function(){
+    Route::get('/', 'TamuController@index')->name('index');
+    Route::post('/', 'TamuController@index');
+    Route::get('/respon/{keluhan}', 'TamuController@respon')->name('respon');
+    Route::post('/respon/{keluhan}', 'TamuController@respon');
+});
 
-Route::resource('tamu', TamuController::class);
+Route::name('petugas.')->prefix('petugas')->middleware('auth','can:petugas')->group(function(){
+    Route::get('/', 'PetugasController@index')->name('index');
+    Route::post('/', 'PetugasController@index');
+    Route::get('/histori', 'PetugasController@histori')->name('histori');
+    Route::post('/histori', 'PetugasController@histori');
+});

@@ -61,8 +61,12 @@
             @include('menu.admin')
         @endcan
 
-        @can('member')
+        @can('tamu')
             @include('menu.member')
+        @endcan
+
+        @can('petugas')
+            @include('menu.petugas')
         @endcan
 
         <!-- Nav Item - Profile -->

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use GroceryCrud\Core\GroceryCrud;
 use App\Keluhan;
 use App\Perbaikan;
 use Illuminate\Http\Request;
+use GroceryCrud\Core\GroceryCrud;
 use Illuminate\Support\Facades\Auth;
 
-class TamuController extends Controller
+class PetugasController extends Controller
 {
     private function _getDatabaseConnection() {
         $databaseConnection = config('database.default');
@@ -61,73 +61,66 @@ class TamuController extends Controller
      */
     public function index()
     {
-        $title = "Keluhan";
-
-        $crud = $this->_getGroceryCrudEnterprise();
-        $crud->setTable('keluhan');
-        $crud->setSkin('bootstrap-v4');
-        $crud->setSubject('Keluhan', 'Keluhan');
-        $crud->unsetColumns(['user_id','created_at','updated_at']);
-        $crud->unsetFields(['user_id','created_at','updated_at']);
-        $crud->callbackBeforeInsert(function ($s) {
-            $s->data['user_id'] = Auth::id();
-            return $s;
-        });
-        $crud->callbackAfterInsert(function ($s) {
-            $data = Keluhan::find($s->insertId);
-            $data->created_at = now();
-            $data->touch();
-
-            Perbaikan::create([
-                'keluhan_id' => $s->insertId,
-                'user_id' => 3,
-                'status_perbaikan' => '-'
-            ]);
-            return $s;
-        });
-        $crud->callbackAfterUpdate(function ($s) {
-            $user = Keluhan::find($s->primaryKeyValue);
-            $user->touch();
-            return $s;
-        });
-        $crud->setActionButton('Respon', 'fa fa-comments', function ($row) {
-            return route('tamu.respon', $row->id);
-        }, false);
-        $crud->setTexteditor(['keluhan']);
-        $crud->fieldType('tanggal_keluhan','date');
-        $crud->where(['user_id' => Auth::id()]);
-        $crud->setRelation('kamar_id','kamar','nomor_kamar');
-        $crud->displayAs([
-            'kamar_id' => 'Nomor Kamar'
-        ]);
-        $output = $crud->render();
-
-        return $this->_show_output($output, $title);
-    }
-
-    public function respon(Keluhan $keluhan)
-    {
-        $title = "Respon";
+        $title = "Perbaikan";
 
         $crud = $this->_getGroceryCrudEnterprise();
         $crud->setTable('perbaikan');
         $crud->setSkin('bootstrap-v4');
-        $crud->setSubject('Respon', 'Respon');
-        $crud->unsetColumns(['keluhan_id','created_at','updated_at']);
-        $crud->unsetAdd()->unsetEdit()->unsetDelete();
-        $crud->setActionButton('Kembali', 'fa fa-arrow-left', function ($row) {
-            return route('tamu.index');
-        }, false);
-        $crud->fieldType('tanggal_perbaikan','date');
-        $crud->where(['keluhan_id' => $keluhan->id]);
-        $crud->setRelation('user_id','users','{name} {last_name}');
+        $crud->setSubject('Perbaikan', 'Perbaikan');
+        $crud->unsetColumns(['user_id','created_at','updated_at']);
+        $crud->unsetFields(['keluhan_id','user_id','created_at','updated_at']);
+        $crud->requiredFields(['status_perbaikan','tanggal_perbaikan']);
+        $crud->unsetDelete()->unsetDeleteMultiple()->unsetAdd();
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = Perbaikan::find($s->primaryKeyValue);
+            $user->touch();
+            return $s;
+        });
+        $crud->setTexteditor(['status_perbaikan']);
+        $crud->fieldType('tanggal_keluhan','date');
+        $crud->where(['user_id' => Auth::id(),'status_perbaikan' => '-']);
+        $crud->setRelation('keluhan_id','keluhan','keluhan');
         $crud->displayAs([
-            'user_id' => 'Nama Petugas'
+            'keluhan_id' => 'Keluhan'
         ]);
-        $crud->unsetSearchColumns(['user_id']);
+        $crud->callbackColumn('keluhan_id', function ($value, $row) {
+            $perbaikan = Perbaikan::find($row->id);
+            return "Nomor kamar: " . $perbaikan->keluhan->kamar->nomor_kamar
+                   . "<br>Tanggal: " .$perbaikan->keluhan->created_at->format('d F Y, H:i')
+                   . $perbaikan->keluhan->keluhan;
+        });
         $output = $crud->render();
 
         return $this->_show_output($output, $title);
     }
 
+    public function histori()
+    {
+        $title = "Perbaikan";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('perbaikan');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Perbaikan', 'Perbaikan');
+        $crud->unsetColumns(['user_id','created_at','updated_at']);
+        $crud->unsetFields(['keluhan_id','user_id','created_at','updated_at']);
+        $crud->requiredFields(['status_perbaikan','tanggal_perbaikan']);
+        $crud->unsetOperations();
+        $crud->setTexteditor(['status_perbaikan']);
+        $crud->fieldType('tanggal_keluhan','date');
+        $crud->where(['user_id' => Auth::id()]);
+        $crud->setRelation('keluhan_id','keluhan','keluhan');
+        $crud->displayAs([
+            'keluhan_id' => 'Keluhan'
+        ]);
+        $crud->callbackColumn('keluhan_id', function ($value, $row) {
+            $perbaikan = Perbaikan::find($row->id);
+            return "Nomor kamar: " . $perbaikan->keluhan->kamar->nomor_kamar
+                   . "<br>Tanggal: " .$perbaikan->keluhan->created_at->format('d F Y, H:i')
+                   . $perbaikan->keluhan->keluhan;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
 }

@@ -29,8 +29,12 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role_id == 1;
         });
 
-        Gate::define('member', function ($user) {
+        Gate::define('tamu', function ($user) {
             return $user->role_id == 2;
+        });
+
+        Gate::define('petugas', function ($user) {
+            return $user->role_id == 3;
         });
     }
 }

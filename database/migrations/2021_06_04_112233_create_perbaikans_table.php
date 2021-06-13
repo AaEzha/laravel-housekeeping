@@ -16,7 +16,7 @@ class CreatePerbaikansTable extends Migration
         Schema::create('perbaikan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('keluhan_id')->constrained('keluhan')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('status_perbaikan')->nullable();
             $table->date('tanggal_perbaikan')->nullable();
             $table->timestamps();
