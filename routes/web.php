@@ -31,8 +31,6 @@ Route::get('/blank', function () {
 })->name('blank');
 
 Route::name('admin.')->prefix('admin')->middleware('can:admin')->group(function(){
-    Route::get('/assets', 'AdminController@assets')->name('assets');
-    Route::post('/assets', 'AdminController@assets');
     Route::get('/status_kamar', 'AdminController@status_kamar')->name('status_kamar');
     Route::post('/status_kamar', 'AdminController@status_kamar');
     Route::get('/roles', 'AdminController@roles')->name('roles');
@@ -43,6 +41,9 @@ Route::name('admin.')->prefix('admin')->middleware('can:admin')->group(function(
     Route::post('/perbaikan', 'AdminController@perbaikan');
     Route::get('/kamar', 'AdminController@kamar')->name('kamar');
     Route::post('/kamar', 'AdminController@kamar');
-    Route::get('/asset-kamar', 'AdminController@asset_kamar')->name('asset-kamar');
-    Route::post('/asset-kamar', 'AdminController@asset_kamar');
+    Route::get('/asset-kamar/{kamar}', 'AdminController@asset_kamar')->name('asset');
+    Route::post('/asset-kamar/{kamar}', 'AdminController@asset_kamar');
 });
+
+
+Route::resource('tamu', TamuController::class);

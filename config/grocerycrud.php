@@ -55,7 +55,7 @@ return [
     // is "Actions" rather than "More"
     'max_action_buttons' => [
         'mobile' => 1,
-        'desktop' => 2
+        'desktop' => 3
     ],
 
     // The allowed file types on upload. If the file extension doesn't exist in the array
