@@ -17,7 +17,7 @@ class Keluhan extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function kamar(): BelongsTo
+    public function kamar()
     {
         return $this->belongsTo(Kamar::class);
     }
