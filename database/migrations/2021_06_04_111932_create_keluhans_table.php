@@ -15,11 +15,12 @@ class CreateKeluhansTable extends Migration
     {
         Schema::create('keluhan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kamar_id')->constrained('kamar')->onDelete('cascade');
+            $table->unsignedBigInteger('kamar_id');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('tanggal_keluhan');
             $table->string('keluhan');
             $table->timestamps();
+            $table->foreign('kamar_id')->references('id')->on('kamar')->onDelete('cascade');
         });
     }
 

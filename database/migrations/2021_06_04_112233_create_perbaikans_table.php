@@ -15,11 +15,12 @@ class CreatePerbaikansTable extends Migration
     {
         Schema::create('perbaikan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('keluhan_id')->constrained('keluhan')->onDelete('cascade');
+            $table->unsignedBigInteger('keluhan_id');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('status_perbaikan')->nullable();
             $table->date('tanggal_perbaikan')->nullable();
             $table->timestamps();
+            $table->foreign('keluhan_id')->references('id')->on('keluhan')->onDelete('cascade');
         });
     }
 

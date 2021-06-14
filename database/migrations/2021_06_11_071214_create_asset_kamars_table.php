@@ -15,10 +15,11 @@ class CreateAssetKamarsTable extends Migration
     {
         Schema::create('asset_kamar', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kamar_id')->constrained('kamar')->onDelete('cascade');
+            $table->unsignedBigInteger('kamar_id');
             $table->string('nama_asset');
             $table->integer('quantity');
             $table->timestamps();
+            $table->foreign('kamar_id')->references('id')->on('kamar')->onDelete('cascade');
         });
     }
 

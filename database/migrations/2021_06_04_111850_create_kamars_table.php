@@ -16,7 +16,9 @@ class CreateKamarsTable extends Migration
         Schema::create('kamar', function (Blueprint $table) {
             $table->id();
             $table->string('nomor_kamar');
+            $table->unsignedBigInteger('status_kamar_id');
             $table->timestamps();
+            $table->foreign('status_kamar_id')->references('id')->on('status_kamar');
         });
     }
 

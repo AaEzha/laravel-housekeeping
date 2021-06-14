@@ -14,7 +14,6 @@ class AddStatusToKamarTable extends Migration
     public function up()
     {
         Schema::table('kamar', function (Blueprint $table) {
-            $table->foreignId('status_kamar_id')->after('nomor_kamar')->nullable()->constrained('status_kamar')->onDelete('cascade');
         });
     }
 
