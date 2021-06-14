@@ -147,6 +147,20 @@ class AdminController extends Controller
             $user->touch();
             return $s;
         });
+        $crud->callbackDelete(function ($s) {
+            return $s;
+        });
+        $crud->callbackAfterDelete(function ($s) {
+            // Your code here
+            $id = $s->primaryKeyValue; // id keluhan
+            $p = Perbaikan::where('keluhan_id', $id);
+            $p->delete();
+
+            $k = Keluhan::find($id);
+            $k->delete();
+
+            return $s;
+        });
         $output = $crud->render();
 
         return $this->_show_output($output, $title);
