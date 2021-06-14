@@ -176,7 +176,9 @@ class AdminController extends Controller
         ]);
         $crud->callbackColumn('keluhan_id', function ($value, $row) {
             $perbaikan = Perbaikan::find($row->id);
-            return "Nomor kamar: " . $perbaikan->keluhan->kamar->nomor_kamar . " \n " .$perbaikan->keluhan->keluhan;
+            $nomor_kamar = $perbaikan->keluhan->kamar->nomor_kamar ?? "---";
+            $keluhan = $perbaikan->keluhan->keluhan ?? "---";
+            return "Nomor kamar: " . $nomor_kamar . " \n " . $keluhan;
         });
         $crud->callbackAfterInsert(function ($s) {
             $data = Perbaikan::find($s->insertId);
