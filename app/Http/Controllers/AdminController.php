@@ -128,10 +128,18 @@ class AdminController extends Controller
             'kamar_id' => 'Nomor Kamar',
             'user_id' => 'Nama Tamu'
         ]);
+        $crud->setTexteditor(['keluhan']);
         $crud->callbackAfterInsert(function ($s) {
             $data = Keluhan::find($s->insertId);
             $data->created_at = now();
             $data->touch();
+
+            Perbaikan::create([
+                'keluhan_id' => $s->insertId,
+                'user_id' => 3,
+                'status_perbaikan' => '-'
+            ]);
+
             return $s;
         });
         $crud->callbackAfterUpdate(function ($s) {
@@ -152,16 +160,22 @@ class AdminController extends Controller
         $crud->setTable('perbaikan');
         $crud->setSkin('bootstrap-v4');
         $crud->setSubject('Perbaikan', 'Perbaikan');
+        $crud->unsetAdd();
         $crud->unsetColumns(['created_at','updated_at']);
         $crud->unsetFields(['created_at','updated_at']);
         $crud->setRelation('keluhan_id', 'keluhan', 'keluhan');
+        $crud->setTexteditor(['keluhan_id']);
         $crud->setRelation('user_id', 'users', '{name} {last_name}', ['role_id' => 3]);
+        $crud->callbackEditField('keluhan_id', function ($fieldValue, $primaryKeyValue, $rowData) {
+            $keluhan = Keluhan::find($fieldValue);
+            return '<textarea class="form-control" name="keluhan_id">' . strip_tags($keluhan->keluhan) . '</textarea>';
+        });
         $crud->displayAs([
             'keluhan_id' => 'Keluhan',
             'user_id' => 'Nama Petugas'
         ]);
         $crud->callbackColumn('keluhan_id', function ($value, $row) {
-            $keluhan = Keluhan::find($row->id);
+            $keluhan = Keluhan::find($value);
             return "Nomor kamar: " . $keluhan->kamar->nomor_kamar . " \n " .$keluhan->keluhan;
         });
         $crud->callbackAfterInsert(function ($s) {
