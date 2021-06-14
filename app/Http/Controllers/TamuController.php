@@ -69,6 +69,7 @@ class TamuController extends Controller
         $crud->setSubject('Keluhan', 'Keluhan');
         $crud->unsetColumns(['user_id','created_at','updated_at']);
         $crud->unsetFields(['user_id','created_at','updated_at']);
+        $crud->requiredFields(['kamar_id','tanggal_keluhan','keluhan']);
         $crud->callbackBeforeInsert(function ($s) {
             $s->data['user_id'] = Auth::id();
             return $s;
