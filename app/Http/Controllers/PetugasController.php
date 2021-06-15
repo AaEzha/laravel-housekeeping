@@ -108,7 +108,10 @@ class PetugasController extends Controller
         $crud->unsetOperations();
         $crud->setTexteditor(['status_perbaikan']);
         $crud->fieldType('tanggal_keluhan','date');
-        $crud->where(['user_id' => Auth::id()]);
+        $crud->where([
+            'perbaikan.user_id = ?' => Auth::id(),
+            'perbaikan.status_perbaikan <> ?' => '-'
+        ]);
         $crud->setRelation('keluhan_id','keluhan','keluhan');
         $crud->displayAs([
             'keluhan_id' => 'Keluhan'

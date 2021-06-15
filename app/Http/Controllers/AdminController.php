@@ -176,14 +176,14 @@ class AdminController extends Controller
         $crud->setSubject('Perbaikan', 'Perbaikan');
         $crud->unsetAdd();
         $crud->unsetColumns(['created_at','updated_at']);
-        $crud->unsetFields(['created_at','updated_at']);
+        $crud->unsetFields(['keluhan_id','created_at','updated_at']);
         $crud->setRelation('keluhan_id', 'keluhan', 'keluhan');
         $crud->setTexteditor(['keluhan_id']);
         $crud->setRelation('user_id', 'users', '{name} {last_name}', ['role_id' => 3]);
-        $crud->callbackEditField('keluhan_id', function ($fieldValue, $primaryKeyValue, $rowData) {
-            $keluhan = Keluhan::find($fieldValue);
-            return '<textarea class="form-control" name="keluhan_id">' . strip_tags($keluhan->keluhan) . '</textarea>';
-        });
+        // $crud->callbackEditField('keluhan_id', function ($fieldValue, $primaryKeyValue, $rowData) {
+        //     $keluhan = Keluhan::find($fieldValue);
+        //     return '<textarea class="form-control" name="keluhan_id">' . strip_tags($keluhan->keluhan) . '</textarea>';
+        // });
         $crud->displayAs([
             'keluhan_id' => 'Keluhan',
             'user_id' => 'Nama Petugas'
