@@ -41,6 +41,8 @@ Route::name('admin.')->prefix('admin')->middleware('auth','can:admin')->group(fu
     Route::post('/perbaikan', 'AdminController@perbaikan');
     Route::get('/kamar', 'AdminController@kamar')->name('kamar');
     Route::post('/kamar', 'AdminController@kamar');
+    Route::get('/asset', 'AdminController@asset')->name('assets');
+    Route::post('/asset', 'AdminController@asset');
     Route::get('/asset-kamar/{kamar}', 'AdminController@asset_kamar')->name('asset');
     Route::post('/asset-kamar/{kamar}', 'AdminController@asset_kamar');
 });

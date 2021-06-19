@@ -112,6 +112,48 @@ class AdminController extends Controller
         return $this->_show_output($output, $title);
     }
 
+    public function asset()
+    {
+        $title = "Asset Kamar";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('assets');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Asset Kamar', 'Asset Kamar');
+        $crud->unsetColumns(['created_at','updated_at']);
+        $crud->unsetFields(['created_at','updated_at']);
+        $crud->callbackAfterInsert(function ($s) {
+            $data = Asset::find($s->insertId);
+            $data->created_at = now();
+            $data->touch();
+
+            $rooms = Kamar::all();
+            foreach($rooms as $room){
+                AssetKamar::updateOrInsert(
+                    ['kamar_id' => $room->id, 'asset_id' => $s->insertId],
+                    ['updated_at' => now()]
+                );
+            }
+            return $s;
+        });
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = Asset::find($s->primaryKeyValue);
+            $user->touch();
+
+            $rooms = Kamar::all();
+            foreach($rooms as $room){
+                AssetKamar::updateOrInsert(
+                    ['kamar_id' => $room->id, 'asset_id' => $s->primaryKeyValue],
+                    ['updated_at' => now()]
+                );
+            }
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
     public function keluhan()
     {
         $title = "Keluhan";
@@ -263,7 +305,7 @@ class AdminController extends Controller
             return $s;
         });
         $crud->unsetSearchColumns(['kamar_id']);
-        // $crud->fieldType('status', 'checkbox_boolean');
+        $crud->unsetAdd()->unsetDelete()->unsetDeleteMultiple();
         $crud->fieldType('status', 'dropdown', [
             '0' => 'Tidak ada',
             '1' => 'Ada'
@@ -282,9 +324,11 @@ class AdminController extends Controller
         });
         $crud->displayAs([
             'kamar_id' => 'Kamar',
-            'status' => 'Keterangan'
+            'status' => 'Keterangan',
+            'asset_id' => 'Nama Asset'
         ]);
         $crud->setRelation('kamar_id','kamar','nomor_kamar');
+        $crud->setRelation('asset_id','assets','nama_asset');
         $crud->where(['kamar_id' => $kamar->id]);
         $output = $crud->render();
 

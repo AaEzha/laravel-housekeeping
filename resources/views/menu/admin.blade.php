@@ -16,11 +16,18 @@
         <span>Status Kamar</span>
     </a>
 </li>
+<li class="nav-item {{ Nav::isRoute('admin.assets') }}">
+    <a class="nav-link" href="{{ route('admin.assets') }}">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Daftar Asset</span>
+    </a>
+</li>
 <li class="nav-item {{ Nav::isRoute('admin.kamar') }}">
     <a class="nav-link" href="{{ route('admin.kamar') }}">
         <i class="fas fa-fw fa-list"></i>
         <span>Kamar</span>
     </a>
+</li>
 <li class="nav-item {{ Nav::isRoute('admin.keluhan') }}">
     <a class="nav-link" href="{{ route('admin.keluhan') }}">
         <i class="fas fa-fw fa-list"></i>
