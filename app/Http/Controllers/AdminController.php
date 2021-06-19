@@ -233,23 +233,14 @@ class AdminController extends Controller
         });
         $crud->displayAs([
             'status_kamar_id' => 'Status Kamar',
-            'created_at' => 'Asset Kamar'
+            'created_at' => ' '
         ]);
         $crud->setRelation('status_kamar_id','status_kamar','status_kamar');
-        $crud->setActionButton('Asset', 'fa fa-list', function ($row) {
-            return route('admin.asset', $row->id);
-        });
+        // $crud->setActionButton('Asset', 'fa fa-list', function ($row) {
+        //     return route('admin.asset', $row->id);
+        // });
         $crud->callbackColumn('created_at', function ($value, $row) {
-            $kamar = Kamar::find($row->id);
-            $asset = $kamar->assets ?? [];
-            // $d = "<ul>";
-            $d = "";
-            foreach($asset as $as):
-            $ada = ($as->status == 1) ? "Ada" : "Tidak Ada";
-            // $d .= $as->nama_asset . " (" . $as->quantity . " pcs) - ". $ada . "<br>";
-            $d .= $as->nama_asset . "<br>";
-            endforeach;
-            // $d .= "</ul>";
+            $d = '<a href="'.route('admin.asset', $row->id).'"><span class="btn btn-primary btn-sm"><i class="fa fa-list" aria-hidden="true"></i> Asset Kamar</span></a>';
             return $d;
         });
         $output = $crud->render();
