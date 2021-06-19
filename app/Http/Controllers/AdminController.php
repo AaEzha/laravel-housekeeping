@@ -218,7 +218,7 @@ class AdminController extends Controller
         $crud->setTable('kamar');
         $crud->setSkin('bootstrap-v4');
         $crud->setSubject('Kamar', 'Kamar');
-        $crud->unsetColumns(['created_at','updated_at']);
+        $crud->unsetColumns(['updated_at']);
         $crud->unsetFields(['created_at','updated_at']);
         $crud->callbackAfterInsert(function ($s) {
             $data = Kamar::find($s->insertId);
@@ -232,11 +232,24 @@ class AdminController extends Controller
             return $s;
         });
         $crud->displayAs([
-            'status_kamar_id' => 'Status Kamar'
+            'status_kamar_id' => 'Status Kamar',
+            'created_at' => 'Asset Kamar'
         ]);
         $crud->setRelation('status_kamar_id','status_kamar','status_kamar');
         $crud->setActionButton('Asset', 'fa fa-list', function ($row) {
             return route('admin.asset', $row->id);
+        });
+        $crud->callbackColumn('created_at', function ($value, $row) {
+            $kamar = Kamar::find($row->id);
+            $asset = $kamar->assets ?? [];
+            // $d = "<ul>";
+            $d = "";
+            foreach($asset as $as):
+            $ada = ($as->status == 1) ? "Ada" : "Tidak Ada";
+            $d .= $as->nama_asset . " (" . $as->quantity . " pcs) - ". $ada . "<br>";
+            endforeach;
+            // $d .= "</ul>";
+            return $d;
         });
         $output = $crud->render();
 
@@ -257,6 +270,8 @@ class AdminController extends Controller
             $s->data['kamar_id'] = $kamar->id;
             return $s;
         });
+        $crud->unsetSearchColumns(['kamar_id']);
+        $crud->fieldType('status', 'checkbox_boolean');
         $crud->callbackAfterInsert(function ($s) {
             $data = AssetKamar::find($s->insertId);
             $data->created_at = now();
@@ -270,7 +285,8 @@ class AdminController extends Controller
             return $s;
         });
         $crud->displayAs([
-            'kamar_id' => 'Kamar'
+            'kamar_id' => 'Kamar',
+            'status' => 'Ada'
         ]);
         $crud->setRelation('kamar_id','kamar','nomor_kamar');
         $crud->where(['kamar_id' => $kamar->id]);

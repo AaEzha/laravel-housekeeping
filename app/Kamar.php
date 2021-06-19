@@ -21,4 +21,14 @@ class Kamar extends Model
     {
         return $this->hasMany(Keluhan::class);
     }
+
+    /**
+     * Get all of the assets for the Kamar
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function assets(): HasMany
+    {
+        return $this->hasMany(AssetKamar::class);
+    }
 }
