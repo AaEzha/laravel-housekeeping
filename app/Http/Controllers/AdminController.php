@@ -246,7 +246,8 @@ class AdminController extends Controller
             $d = "";
             foreach($asset as $as):
             $ada = ($as->status == 1) ? "Ada" : "Tidak Ada";
-            $d .= $as->nama_asset . " (" . $as->quantity . " pcs) - ". $ada . "<br>";
+            // $d .= $as->nama_asset . " (" . $as->quantity . " pcs) - ". $ada . "<br>";
+            $d .= $as->nama_asset . "<br>";
             endforeach;
             // $d .= "</ul>";
             return $d;
@@ -258,7 +259,7 @@ class AdminController extends Controller
 
     public function asset_kamar(Kamar $kamar)
     {
-        $title = "Asset Kamar";
+        $title = "Asset Kamar " . $kamar->nomor_kamar;
 
         $crud = $this->_getGroceryCrudEnterprise();
         $crud->setTable('asset_kamar');
