@@ -271,7 +271,11 @@ class AdminController extends Controller
             return $s;
         });
         $crud->unsetSearchColumns(['kamar_id']);
-        $crud->fieldType('status', 'checkbox_boolean');
+        // $crud->fieldType('status', 'checkbox_boolean');
+        $crud->fieldType('status', 'dropdown', [
+            '0' => 'Tidak ada',
+            '1' => 'Ada'
+        ]);
         $crud->callbackAfterInsert(function ($s) {
             $data = AssetKamar::find($s->insertId);
             $data->created_at = now();
@@ -286,7 +290,7 @@ class AdminController extends Controller
         });
         $crud->displayAs([
             'kamar_id' => 'Kamar',
-            'status' => 'Ada'
+            'status' => 'Keterangan'
         ]);
         $crud->setRelation('kamar_id','kamar','nomor_kamar');
         $crud->where(['kamar_id' => $kamar->id]);
