@@ -33,8 +33,8 @@
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-dollar-sign"></i>
+            <div class="sidebar-brand-icon">
+                <i class="fas fa-building"></i>
             </div>
             <div class="sidebar-brand-text mx-3">{{ config('app.name') }}</div>
         </a>
@@ -147,7 +147,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Alejandro RH 2020</span>
+                    <span>Copyright &copy; {{ config('app.name', 'Laravel') }}</span>
                 </div>
             </div>
         </footer>
